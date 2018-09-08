@@ -15,13 +15,6 @@ import java.util.List;
  * @author Mauricio Martinez Jimenez
  * @version 1.0
  */
-@CrossOrigin(
-    origins = {"http://localhost:4200"},
-    methods = {
-        RequestMethod.GET,
-        RequestMethod.POST,
-        RequestMethod.PUT,
-        RequestMethod.DELETE}, maxAge = 4800)
 @RestController
 @RequestMapping("/books")
 
@@ -43,10 +36,10 @@ public class BooksTrackerController
         return repository.findAll();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public void modifyBookById(@PathVariable("id") ObjectId id, @Valid
-    @RequestBody Books books) {
-        books.set_id(id);
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public void modifyBookById(
+        @Valid
+        @RequestBody Books books) {
         repository.save(books);
     }
 
@@ -54,6 +47,12 @@ public class BooksTrackerController
     public Books createBook(@Valid @RequestBody Books book) {
         book.set_id(ObjectId.get());
         repository.save(book);
+        return book;
+    }
+
+    @RequestMapping(value = "/deletion", method = RequestMethod.POST)
+    public Books deleteBook(@Valid @RequestBody Books book) {
+        repository.delete(book);
         return book;
     }
 
