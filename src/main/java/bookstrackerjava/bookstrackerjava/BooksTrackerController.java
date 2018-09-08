@@ -15,6 +15,13 @@ import java.util.List;
  * @author Mauricio Martinez Jimenez
  * @version 1.0
  */
+@CrossOrigin(
+    origins = {"http://localhost:4200"},
+    methods = {
+        RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.PUT,
+        RequestMethod.DELETE}, maxAge = 4800)
 @RestController
 @RequestMapping("/books")
 
@@ -30,14 +37,12 @@ public class BooksTrackerController
         return "hi";
     }
 
-    @CrossOrigin
     @RequestMapping(value = "/", method = RequestMethod.GET)
     List<Books> getAllBooks()
     {
         return repository.findAll();
     }
 
-    @CrossOrigin
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void modifyBookById(@PathVariable("id") ObjectId id, @Valid
     @RequestBody Books books) {
@@ -45,7 +50,6 @@ public class BooksTrackerController
         repository.save(books);
     }
 
-    @CrossOrigin
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public Books createBook(@Valid @RequestBody Books book) {
         book.set_id(ObjectId.get());
