@@ -17,7 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/books")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+
 public class BooksTrackerController
 {
 
@@ -30,12 +30,14 @@ public class BooksTrackerController
         return "hi";
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/", method = RequestMethod.GET)
     List<Books> getAllBooks()
     {
         return repository.findAll();
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void modifyBookById(@PathVariable("id") ObjectId id, @Valid
     @RequestBody Books books) {
@@ -43,6 +45,7 @@ public class BooksTrackerController
         repository.save(books);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public Books createBook(@Valid @RequestBody Books book) {
         book.set_id(ObjectId.get());
