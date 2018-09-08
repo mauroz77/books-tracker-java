@@ -1,10 +1,12 @@
 package bookstrackerjava.bookstrackerjava;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import bookstrackerjava.bookstrackerjava.model.Books;
+import bookstrackerjava.bookstrackerjava.repositories.BooksRepository;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -15,37 +17,37 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/books")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class BooksTrackerController
 {
 
+    @Autowired
+    private BooksRepository repository;
+
     @RequestMapping("/hi")
-    String getHi()
+    String sayHi()
     {
         return "hi";
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    List<Book> getAllBooks()
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    List<Books> getAllBooks()
     {
-        Book b1 = new Book();
-        b1.setAuthor("Author1");
-        b1.setTitle("Title1");
-        b1.setStatus("Reading");
-        b1.setGenre("Fiction");
-        b1.setDescription("Oe");
-        return Arrays.asList(b1);
+        return repository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    void insertBook(Book book)
-    {
-
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public void modifyBookById(@PathVariable("id") ObjectId id, @Valid
+    @RequestBody Books books) {
+        books.set_id(id);
+        repository.save(books);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    void updateBook(Book book)
-    {
-
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public Books createBook(@Valid @RequestBody Books book) {
+        book.set_id(ObjectId.get());
+        repository.save(book);
+        return book;
     }
 
 }
