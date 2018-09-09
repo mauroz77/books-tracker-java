@@ -49,11 +49,10 @@ public class BooksTrackerController
         repository.save(book);
         return book;
     }
-
-    @RequestMapping(value = "/deletion", method = RequestMethod.POST)
-    public Books deleteBook(@Valid @RequestBody Books book) {
-        repository.delete(book);
-        return book;
+    
+    @RequestMapping(value = "/deletion/{id}", method = RequestMethod.POST)
+    public void deleteBook(@PathVariable ObjectId id) {
+        repository.delete(repository.findBy_id(id));
     }
 
 }
